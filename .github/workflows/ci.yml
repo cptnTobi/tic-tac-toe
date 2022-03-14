@@ -15,8 +15,6 @@ jobs:
               run: docker-compose pull
             - name: Start services
               run: docker-compose up --build -d
-            - name: Create DB              
-              run: docker-compose exec -T php bin/console doctri:data:create
             - name: Wait for services
               run: |
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
