@@ -17,14 +17,17 @@ jobs:
               run: docker-compose up --build -d
             - name: Wait for services
               run: |
+                docker-compose ps php;
                   while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
+                    docker-compose ps php;
+                    echo $status; 
                     case $status in
-                      starting) sleep 1;;
+                      starting) sleep 10;;
                       healthy) exit 0;;
                       unhealthy) exit 1;;
                     esac
                   done
-                  exit 1
+                exit 2
             - name: Check HTTP reachability
               run: curl http://localhost
             - name: Check HTTPS reachability
