@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block keywords %}
+    tic tac toe 
+{% endblock %}
+
+{% block title %}
+    tic tac toe
+{% endblock %}
+
+{% block OpenGraph %}  
+    <meta property="og:title" content="tic tac toe"/>
+    <meta property="og:description" content="tic tac toe"/>
+{% endblock %}    
+
+{% block body %}
+    <div id="board-container">Loading board...</i></div>    
+{% endblock %}
+
+{% block footer_scripts %}
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    {% include '/imports/communication.html.twig' only %}
+    {% include '/imports/move.html.twig' only %}
+
+    <script type="text/javascript">
+        const user = 1;
+        const boardSize = 3;
+        const winLength = 3;
+        
+        renderBoard(boardSize, winLength);
+        getPossibleMoves(user);
+
+        async function getPossibleMoves(user) {
+            let $possiblesMoves = possibleMoves(user);            
+          
+        }
+        
+        async function renderBoard(boardSize, winLength) {
+            let htmlSegment = '';
+            
+            for (let x = 0; x < boardSize; x++) {
+                for (let y = 0; y < boardSize; y++) {
+                     htmlSegment += `{% include '/components/board_field.html.twig' only %}`
+                        .replace('field-x', x)
+                        .replace('field-y', y)
+                        .replaceAll('field-user', x+'-' + y)                  
+                    
+                }
+                htmlSegment += '<br style="clear:both;">';
+            }
+            
+            document.getElementById("board-container").innerHTML = htmlSegment;
+         
+            setTimeout(function () {
+                setClick(boardSize, user);
+            }, 100);
+        }
+        
+        async function setClick(boardSize, user) {
+            for (let x = 0; x < boardSize; x++) {
+                for (let y = 0; y < boardSize; y++) {
+                    document.getElementById('board-field-'+x+'-'+y).addEventListener(
+                        "click", 
+                        function() {
+                             move(x, y, user);
+                        }
+                    );
+                }
+            }
+        }
+      
+    </script>  
+{% endblock footer_scripts %}

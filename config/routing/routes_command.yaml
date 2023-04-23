@@ -1,0 +1,4 @@
+api_move_add:
+  path: /api/v1/move
+  controller: App\Move\Command\Infrastructure\API\V1\MoveController::move
+  methods: POST

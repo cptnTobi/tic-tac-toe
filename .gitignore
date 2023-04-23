@@ -2,3 +2,5 @@
 .idea
 /var/cache/*
 /var/logs/*
+/tools/php-cs-fixer/vendor/
+.env

@@ -1,0 +1,36 @@
+framework:
+    messenger:
+        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+        # failure_transport: failed
+        default_bus: query.bus
+
+        buses:
+            command.bus: ~               
+            query.bus: ~
+            
+        transports:
+            # https://symfony.com/doc/current/messenger.html#transport-configuration
+            sync: 'sync://'
+            async: 'sync://'            
+            #async: 
+            #    dsn: '%env(RABBITMQ_URL)%'
+            #    retry_strategy:
+            #         max_retries: 1
+            #         delay: 1000
+            #         multiplier: 2
+            # failed: 'doctrine://default?queue_name=failed'
+
+        routing:
+            # Route your messages to the transports
+            'App\Shared\Domain\Interfaces\Command\CommandInterface': async
+            'App\Shared\Domain\Interfaces\Query\QueryInterface': sync          
+            
+# when@test:
+#    framework:
+#        messenger:
+#            transports:
+#                # replace with your transport name here (e.g., my_transport: 'in-memory://')
+#                # For more Messenger testing tools, see https://github.com/zenstruck/messenger-test
+#                async: 'in-memory://'
+        
+   

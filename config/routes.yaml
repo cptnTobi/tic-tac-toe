@@ -1,6 +1,7 @@
-controllers:
-    resource: ../src/Controller/
-    type: annotation
+routes_command:
+    resource: 'routing/routes_command.yaml'
+routes_query:
+    resource: 'routing/routes_query.yaml'
 
 kernel:
     resource: ../src/Kernel.php

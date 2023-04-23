@@ -1,0 +1,9 @@
+page_game:
+  path: /
+  controller: App\Board\Query\Infrastructure\API\V1\GamePageController::getPage
+  methods: GET
+  
+api_move_get_possible:
+  path: /api/v1/possible-moves
+  controller: App\Move\Query\Infrastructure\API\V1\MoveController::getPossibleMoves
+  methods: GET

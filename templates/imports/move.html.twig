@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    async function move(x, y, user) {
+        let data = {
+            user: user,
+            x: x,
+            y: y
+        };
+
+        let url = "{{ path('api_move_add') }}";
+        postData(url, data).then((data) => {
+            // Success
+        });
+    }
+    
+    async function possibleMoves(id) {
+        let url = "{{ path('api_move_get_possible', {'id': 'replace-id'} | escape('js')) }}"
+            .replace('replace-id', id);
+       
+        getData(url).then(() => {
+            // Success
+        });
+    }
+</script>  
