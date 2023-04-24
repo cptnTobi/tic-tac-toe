@@ -2,3 +2,8 @@ api_move_add:
   path: /api/v1/move
   controller: App\Move\Command\Infrastructure\API\V1\MoveController::move
   methods: POST
+  
+api_board_create:
+  path: /api/v1/board/{id}/create
+  controller: App\Board\Command\Infrastructure\API\V1\BoardController::create
+  methods: POST

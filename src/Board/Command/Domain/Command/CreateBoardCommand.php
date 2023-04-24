@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Move\Command\Domain\Command;
+namespace App\Board\Command\Domain\Command;
 
 use App\Shared\Domain\Interfaces\Command\CommandInterface;
-use App\Move\Command\Model\Move;
+use App\Shared\Domain\Model\Uuid;
 
-class CreateMoveCommand implements CommandInterface
+class CreateBoardCommand implements CommandInterface
 {
-    private const NAME = 'create_move_command';
+    private const NAME = 'create_board_command';
 
     public function __construct(
-        public Move $move
+        public Uuid $uuid
     ) {
     }
 

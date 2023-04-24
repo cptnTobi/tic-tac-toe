@@ -2,21 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Move\Command\Infrastructure\API\V1;
+namespace App\Board\Command\Infrastructure\API\V1;
 
-use App\Move\Command\Domain\Command\CreateMoveCommand;
-
-use App\Move\Command\Model\Coordinates;
-use App\Move\Command\Model\Move;
+use App\Board\Command\Domain\Command\CreateBoardCommand;
 use App\Shared\Domain\Factory\ResponseFactory;
 use App\Shared\Domain\Model\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
-class MoveController extends AbstractController
+class BoardController extends AbstractController
 {
     public function __construct(
         private MessageBusInterface $bus,
@@ -24,16 +20,10 @@ class MoveController extends AbstractController
     ) {
     }
 
-    public function move(Request $request): Response
+    public function create(string $id): Response
     {
-        $data = json_decode($request->getContent());
-
-        $command = new CreateMoveCommand(
-            new Move(
-                new Uuid($data->user),
-                new Uuid($data->board),
-                new Coordinates($data->x, $data->y),
-            )
+        $command = new CreateBoardCommand(
+            new Uuid($id)
         );
 
         $this->bus->dispatch($command);

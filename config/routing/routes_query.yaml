@@ -7,3 +7,8 @@ api_move_get_possible:
   path: /api/v1/possible-moves
   controller: App\Move\Query\Infrastructure\API\V1\MoveController::getPossibleMoves
   methods: GET
+  
+api_board_state:
+  path: /api/v1/board/{id}/state}
+  controller: App\Board\Query\Infrastructure\API\V1\BoardStateController::getBoardState
+  methods: GET

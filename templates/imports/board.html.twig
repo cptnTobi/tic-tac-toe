@@ -1,0 +1,23 @@
+<script type="text/javascript">
+    async function create(user, board) {
+        let data = {
+            board: board
+        };
+
+        let url = "{{ path('api_board_create', {'id': 'replace-id'} | escape('js')) }}"
+            .replace('replace-id', board);
+    
+        postData(url, data).then((data) => {
+            return data;
+        });
+    }
+    
+    async function boardState(boardId) {
+        let url = "{{ path('api_board_state', {'id': 'replace-id'} | escape('js')) }}"
+            .replace('replace-id', boardId);
+    
+        return getData(url).then((res) => {  
+            return res.data;
+        });
+    }
+</script>  

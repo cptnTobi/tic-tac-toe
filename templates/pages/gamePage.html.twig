@@ -14,6 +14,7 @@
 {% endblock %}    
 
 {% block body %}
+    <button id="btn_create" type="button">Create/reset board</button>
     <div id="board-container">Loading board...</i></div>    
 {% endblock %}
 
@@ -22,29 +23,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     {% include '/imports/communication.html.twig' only %}
     {% include '/imports/move.html.twig' only %}
+    {% include '/imports/board.html.twig' only %}
 
     <script type="text/javascript">
-        const user = 1;
+        const user = '1';
+        const board = '1';
         const boardSize = 3;
         const winLength = 3;
         
-        renderBoard(boardSize, winLength);
+        renderBoard();
         getPossibleMoves(user);
 
-        async function getPossibleMoves(user) {
-            let $possiblesMoves = possibleMoves(user);            
-          
+        async function getBoardState(user) {
+            return $boardState = boardState(user);       
         }
         
-        async function renderBoard(boardSize, winLength) {
+        async function getPossibleMoves(user) {
+            let $possiblesMoves = possibleMoves(user);       
+        }
+        
+        async function renderBoard() {
             let htmlSegment = '';
             
-            for (let x = 0; x < boardSize; x++) {
-                for (let y = 0; y < boardSize; y++) {
+            $boardState = await boardState(user, board);
+                          
+            let boardSize = $boardState.state[0].length;
+            for (let y = 0; y < boardSize; y++) {
+                for (let x = 0; x < boardSize; x++) {
                      htmlSegment += `{% include '/components/board_field.html.twig' only %}`
                         .replace('field-x', x)
                         .replace('field-y', y)
-                        .replaceAll('field-user', x+'-' + y)                  
+                        .replaceAll('field-user', getUserSymbol($boardState.state[x][y]))              
                     
                 }
                 htmlSegment += '<br style="clear:both;">';
@@ -56,6 +65,17 @@
                 setClick(boardSize, user);
             }, 100);
         }
+         
+        function getUserSymbol(user) {
+            if (user === 0) {
+                return '[]';
+            }
+            if (user === 1) {
+                return 'x';
+            }
+            
+            return 'o';
+        }
         
         async function setClick(boardSize, user) {
             for (let x = 0; x < boardSize; x++) {
@@ -63,12 +83,24 @@
                     document.getElementById('board-field-'+x+'-'+y).addEventListener(
                         "click", 
                         function() {
-                             move(x, y, user);
+                            move(user, board, x, y);
+                            setTimeout(function () {
+                                renderBoard();
+                            }, 100);                             
                         }
-                    );
+                    );                   
                 }
             }
         }
       
+        document.getElementById('btn_create').addEventListener(
+            "click", 
+            function() {
+                create(user, board);
+                setTimeout(function () {
+                    renderBoard();
+                }, 100);  
+            }
+        );
     </script>  
 {% endblock footer_scripts %}

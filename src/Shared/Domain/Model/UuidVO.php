@@ -12,7 +12,7 @@ class UuidVO extends StringVO
         public $value = null
     ) {
         if (empty($value)) {
-            $value =  Uuid::V7()->toHex();
+            $value =  Uuid::V6()->toBase32();
         }
 
         parent::__construct($value);
