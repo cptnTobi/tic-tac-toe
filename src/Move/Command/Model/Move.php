@@ -12,7 +12,7 @@ final class Move
     public function __construct(
         public Uuid $userUuid,
         public Uuid $boardUuid,
-        public Coordinates $coordinates
+        public ?Coordinates $coordinates
     ) {
     }
 }

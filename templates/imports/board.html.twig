@@ -16,8 +16,17 @@
         let url = "{{ path('api_board_state', {'id': 'replace-id'} | escape('js')) }}"
             .replace('replace-id', boardId);
     
-        return getData(url).then((res) => {  
+        return getData(url).then((res) => {         
             return res.data;
+        });
+    }
+    
+    async function boardStatus(id) {
+        let url = "{{ path('api_board_status', {'id': 'replace-id'} | escape('js')) }}"
+            .replace('replace-id', id);
+       
+        getData(url).then((res) => {   
+            return res.data.userUuid;
         });
     }
 </script>  

@@ -31,3 +31,18 @@ services:
         namespace: App\
         resource: '%kernel.project_dir%/src/**/Query/Application/Handler/*Handler.php'
         tags: [{ name: messenger.message_handler, bus: query.bus }]
+        
+        
+    _instanceof:
+        App\Board\Query\Domain\Interfaces\WinnerStrategyInterface:
+            tags: ['app.winner_strategy']   
+        App\Move\Command\Domain\Interfaces\MoveStrategyInterface:
+            tags: ['app.move_strategy']
+            
+    App\Board\Query\Domain\Service\WinnerService:
+        arguments:
+            $strategies: !tagged_iterator app.winner_strategy
+
+    App\Move\Command\Domain\Service\MoveFinderService:
+        arguments:
+            $strategies: !tagged_iterator app.move_strategy

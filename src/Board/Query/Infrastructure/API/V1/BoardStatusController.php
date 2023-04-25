@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Board\Query\Infrastructure\API\V1;
 
 use App\Board\Query\Domain\Query\GetBoardStateQuery;
+use App\Board\Query\Domain\Query\GetBoardStatusQuery;
 use App\Shared\Domain\Factory\ResponseFactory;
 use App\Shared\Domain\Model\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +14,7 @@ use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 
-class BoardStateController extends AbstractController
+class BoardStatusController extends AbstractController
 {
     use HandleTrait {
         handle as handleQuery;
@@ -31,7 +32,7 @@ class BoardStateController extends AbstractController
         return $this->render('pages/gamePage.html.twig');
     }
 
-    public function getBoardState(string $id): Response
+    public function getBoardStatus(string $id): Response
     {
         /**
         $value = $this->cache->get("xxx", function (ItemInterface $item) {
@@ -45,8 +46,13 @@ class BoardStateController extends AbstractController
         );
         $boardStateDTO = $this->handleQuery($query);
 
+        $query = new GetBoardStatusQuery(
+            $boardStateDTO
+        );
+        $boardStatusDTO = $this->handleQuery($query);
+
         return ResponseFactory::createSuccessResponse([
-            'data' => json_decode(json_encode($boardStateDTO), true)
+            'data' => json_decode(json_encode($boardStatusDTO), true)
         ]);
     }
 }

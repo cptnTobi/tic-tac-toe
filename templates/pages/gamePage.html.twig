@@ -14,6 +14,13 @@
 {% endblock %}    
 
 {% block body %}
+    <h1>TIC TAC TOE</h1>
+    <p>Please press the button to start or to to reset a game</p>
+    <br/>
+    <h2>Status</h2>
+    <div id="status-container">...</i></div>    
+    <br/>
+    <br/>
     <button id="btn_create" type="button">Create/reset board</button>
     <div id="board-container">Loading board...</i></div>    
 {% endblock %}
@@ -26,17 +33,13 @@
     {% include '/imports/board.html.twig' only %}
 
     <script type="text/javascript">
-        const user = '1';
+        const user = '2';
         const board = '1';
         const boardSize = 3;
         const winLength = 3;
         
         renderBoard();
         getPossibleMoves(user);
-
-        async function getBoardState(user) {
-            return $boardState = boardState(user);       
-        }
         
         async function getPossibleMoves(user) {
             let $possiblesMoves = possibleMoves(user);       
@@ -45,7 +48,7 @@
         async function renderBoard() {
             let htmlSegment = '';
             
-            $boardState = await boardState(user, board);
+            $boardState = await boardState(board);
                           
             let boardSize = $boardState.state[0].length;
             for (let y = 0; y < boardSize; y++) {
@@ -64,17 +67,44 @@
             setTimeout(function () {
                 setClick(boardSize, user);
             }, 100);
+            
+             setTimeout(function () {
+                updateStatus(boardSize, user);
+            }, 100);
         }
          
         function getUserSymbol(user) {
+  
             if (user === 0) {
-                return '[]';
-            }
-            if (user === 1) {
-                return 'x';
+                return '[ ]';
             }
             
-            return 'o';
+            if (user === '1') {
+                return '[x]';
+            }
+            
+            return '[o]';
+        }
+        
+        async function updateStatus() {
+            let status = await boardStatus(board);  
+            // TODO: Bug: Cannot retrieve value from this function
+            /**
+            switch (status) {
+                case 0:
+                  // do nothing, game is ongoing
+                case 1:
+                  setStatus('Computer won.');
+                case 2:
+                    setStatus('You won.');
+                default:
+                  setStatus('...');
+              }
+            **/
+        }
+        
+        function setStatus(status) {
+            document.getElementById("status-container").innerHTML = status;            
         }
         
         async function setClick(boardSize, user) {
@@ -99,6 +129,7 @@
                 create(user, board);
                 setTimeout(function () {
                     renderBoard();
+                    setStatus('Started');
                 }, 100);  
             }
         );

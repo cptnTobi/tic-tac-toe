@@ -21,20 +21,21 @@ class MoveService
 
     public function move(Uuid $userUuid, Uuid $boardUuid, Coordinates $coordinates): void
     {
-
-        $board = $this->boardRepository->find($userUuid->value);
+        $board = $this->boardRepository->find($boardUuid->value);
         if (!$board) {
-            throw new EntityNotFoundException('Board not found: ' . $userUuid->value);
+            throw new EntityNotFoundException('Board not found: ' . $boardUuid->value);
         }
 
         $boardState = json_decode($board->getState());
-        // $this->guardCoordinates($boardState, $coordinates);
+        $this->guardCoordinates($boardState, $coordinates);
 
         $boardState = $this->setStateCoordinates($boardState, $coordinates, $userUuid);
 
         $board->setState(json_encode($boardState));
         $this->boardRepository->save($board);
     }
+
+
 
     private function guardCoordinates(array $boardState, Coordinates $coordinates): void
     {

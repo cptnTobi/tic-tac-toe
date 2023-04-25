@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Move\Command\Infrastructure\API\V1;
 
+use App\Move\Command\Domain\Command\CreateAIMoveCommand;
 use App\Move\Command\Domain\Command\CreateMoveCommand;
-
 use App\Move\Command\Model\Coordinates;
 use App\Move\Command\Model\Move;
 use App\Shared\Domain\Factory\ResponseFactory;
@@ -35,7 +35,17 @@ class MoveController extends AbstractController
                 new Coordinates($data->x, $data->y),
             )
         );
+        $this->bus->dispatch($command);
 
+
+
+        $command = new CreateAIMoveCommand(
+            new Move(
+                new Uuid('1'),
+                new Uuid($data->board),
+                null
+            )
+        );
         $this->bus->dispatch($command);
 
         $this->cache->delete("xxx");
