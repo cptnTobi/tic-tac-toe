@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BoardStateControllerTest extends WebTestCase
 {
-    
     /**
      * @dataProvider urlProvider
      */
@@ -24,7 +23,7 @@ class BoardStateControllerTest extends WebTestCase
             ['GET', '/', 200, 'Start page'],
             ['GET', '/api/v1/possible-moves', 200, 'Possible moves'],
             ['GET', '/api/v1/board/1/state', 503, 'Board state'],
-            ['GET', '/api/v1/game/1/status', 503, 'Board status'],        
+            ['GET', '/api/v1/game/1/status', 503, 'Board status'],
         ];
     }
 }

@@ -12,7 +12,7 @@ use App\Shared\Infrastructure\Repository\BoardRepository;
 class BoardService
 {
     public function __construct(
-        private BoardRepository $boardRepository,
+        public BoardRepository $boardRepository,
         private BaseLoggerInterface $logger
     ) {
     }
