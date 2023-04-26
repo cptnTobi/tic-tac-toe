@@ -8,7 +8,6 @@ use App\Board\Query\Domain\Interfaces\WinnerStrategyInterface;
 use App\Move\Command\Application\DTO\BoardStateDTO;
 use App\Move\Command\Domain\Interfaces\MoveStrategyInterface;
 use App\Move\Command\Model\Coordinates;
-use App\Shared\Domain\Exception\BadParameterException;
 
 class MoveStrategyEmptyColumns implements MoveStrategyInterface
 {
@@ -32,12 +31,14 @@ class MoveStrategyEmptyColumns implements MoveStrategyInterface
                     break;
                 }
 
-                if (!$this->isTakenByAI((string)$boardStateDTO->state[$x][$y])) {
+                if (!$this->isTaken((string)$boardStateDTO->state[$x][$y])) {
                     $tmpCoordinates[] = new Coordinates($x, $y);
                 }
             }
 
-            $res = array_merge($res, $tmpCoordinates);
+            if ($isFree) {
+                $res = array_merge($res, $tmpCoordinates);
+            }
         }
 
         return $res;
@@ -51,7 +52,7 @@ class MoveStrategyEmptyColumns implements MoveStrategyInterface
         );
     }
 
-    private function isTakenByAI(string $userUuid): bool
+    private function isTaken(string $userUuid): bool
     {
         return  $userUuid !== '0';
     }

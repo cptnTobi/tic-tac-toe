@@ -8,7 +8,6 @@ use App\Board\Query\Domain\Interfaces\WinnerStrategyInterface;
 use App\Move\Command\Application\DTO\BoardStateDTO;
 use App\Move\Command\Domain\Interfaces\MoveStrategyInterface;
 use App\Move\Command\Model\Coordinates;
-use App\Shared\Domain\Exception\BadParameterException;
 
 class MoveStrategyEmptyRows implements MoveStrategyInterface
 {
@@ -25,19 +24,21 @@ class MoveStrategyEmptyRows implements MoveStrategyInterface
         for ($y = 0; $y < $boardSize; $y++) {
             $isFree = true;
             $tmpCoordinates = [];
-            for ($x = 0; $x < $boardSize; $x++) {
 
+            for ($x = 0; $x < $boardSize; $x++) {
                 $isFree = $this->isFreeOrAI((string)$boardStateDTO->state[$x][$y]);
                 if (!$isFree) {
                     break;
                 }
 
-                if (!$this->isTakenByAI((string)$boardStateDTO->state[$x][$y])) {
+                if (!$this->isTaken((string)$boardStateDTO->state[$x][$y])) {
                     $tmpCoordinates[] = new Coordinates($x, $y);
                 }
             }
 
-            $res = array_merge($res, $tmpCoordinates);
+            if ($isFree) {
+                $res = array_merge($res, $tmpCoordinates);
+            }
         }
 
         return $res;
@@ -45,13 +46,14 @@ class MoveStrategyEmptyRows implements MoveStrategyInterface
 
     private function isFreeOrAI(string $userUuid): bool
     {
+
         return  (
             $userUuid === '0'
         ||  $userUuid === '1'
         );
     }
 
-    private function isTakenByAI(string $userUuid): bool
+    private function isTaken(string $userUuid): bool
     {
         return  $userUuid !== '0';
     }
