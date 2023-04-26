@@ -24,9 +24,9 @@ class MoveStrategyEmptyRows implements MoveStrategyInterface
 
         for ($y = 0; $y < $boardSize; $y++) {
             $isFree = true;
+            $tmpCoordinates = [];
             for ($x = 0; $x < $boardSize; $x++) {
 
-                $tmpCoordinates = [];
                 $isFree = $this->isFreeOrAI((string)$boardStateDTO->state[$x][$y]);
                 if (!$isFree) {
                     break;
