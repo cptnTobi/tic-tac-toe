@@ -21,18 +21,23 @@ class MoveService
 
     public function move(Uuid $userUuid, Uuid $boardUuid, Coordinates $coordinates): void
     {
-        $board = $this->boardRepository->find($boardUuid->value);
-        if (!$board) {
-            throw new EntityNotFoundException('Board not found: ' . $boardUuid->value);
+        try {
+            $board = $this->boardRepository->find($boardUuid->value);
+            if (!$board) {
+                throw new EntityNotFoundException('Board not found: ' . $boardUuid->value);
+            }
+
+            $boardState = json_decode($board->getState());
+            $this->guardCoordinates($boardState, $coordinates);
+
+            $boardState = $this->setStateCoordinates($boardState, $coordinates, $userUuid);
+
+            $board->setState(json_encode($boardState));
+            $this->boardRepository->save($board);
+        } catch (\Throwable $e) {
+            $this->logger->critical('Could not move in board: ' . $boardUuid->value, ['error' => $e->getMessage()]);
+            throw BadParameterException::fromData('Could not move in board: ' . $boardUuid->value, $e);
         }
-
-        $boardState = json_decode($board->getState());
-        $this->guardCoordinates($boardState, $coordinates);
-
-        $boardState = $this->setStateCoordinates($boardState, $coordinates, $userUuid);
-
-        $board->setState(json_encode($boardState));
-        $this->boardRepository->save($board);
     }
 
 

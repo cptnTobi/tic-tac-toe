@@ -22,23 +22,28 @@ class MoveFinderService
 
     public function findCoordinates(Uuid $boardUuid): ?Coordinates
     {
-        $board = $this->boardRepository->find($boardUuid->value);
-        if (!$board) {
-            throw new EntityNotFoundException('Board not found: ' . $boardUuid->value);
-        }
+        try {
+            $board = $this->boardRepository->find($boardUuid->value);
+            if (!$board) {
+                throw new EntityNotFoundException('Board not found: ' . $boardUuid->value);
+            }
 
-        $boardStateDTO = new BoardStateDTO(json_decode($board->getState()));
+            $boardStateDTO = new BoardStateDTO(json_decode($board->getState()));
 
-        foreach ($this->strategies as $strategy) {
-            if ($strategy->supports(MoveStrategyInterface::TYPE_RECT)) {
-                $coordinates = $strategy->execute($boardStateDTO);
+            foreach ($this->strategies as $strategy) {
+                if ($strategy->supports(MoveStrategyInterface::TYPE_RECT)) {
+                    $coordinates = $strategy->execute($boardStateDTO);
 
-                if($coordinates !== null) {
-                    return $coordinates;
+                    if($coordinates !== null) {
+                        return $coordinates;
+                    }
                 }
             }
-        }
 
-        return null;
+            return null;
+        } catch (\Throwable $e) {
+            $this->logger->critical('Could get find coordinates for board: ' . $boardUuid->value, ['error' => $e->getMessage()]);
+            throw BadParameterException::fromData('Could get find coordinates for board: ' . $boardUuid->value, $e);
+        }
     }
 }

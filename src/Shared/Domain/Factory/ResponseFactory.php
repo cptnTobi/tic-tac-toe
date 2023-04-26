@@ -25,8 +25,8 @@ final class ResponseFactory implements ResponseInterface
     {
         $code = $code ?? $e?->getCode();
         $code = (!$code) ? Response::HTTP_SERVICE_UNAVAILABLE : $code;
-       
-       
+
+
         if ($request === null) {
             return new Response(null, $code);
         }

@@ -25,16 +25,21 @@ class BoardService
 
     public function createBoard(Uuid $uuid): void
     {
-        $board = $this->boardRepository->find($uuid->value);
-        if ($board) {
-            $this->boardRepository->remove($board);
+        try {
+            $board = $this->boardRepository->find($uuid->value);
+            if ($board) {
+                $this->boardRepository->remove($board);
+            }
+
+            $board = new Board();
+
+            $board->setId($uuid->value);
+            $board->setState(json_encode(self::BOARD_DEFAULT));
+
+            $this->boardRepository->save($board);
+        } catch (\Throwable $e) {
+            $this->logger->critical('Could create board: ' . $uuid->value, ['error' => $e->getMessage()]);
+            throw BadParameterException::fromData('Could create board: ' . $uuid->value, $e);
         }
-
-        $board = new Board();
-
-        $board->setId($uuid->value);
-        $board->setState(json_encode(self::BOARD_DEFAULT));
-
-        $this->boardRepository->save($board);
     }
 }

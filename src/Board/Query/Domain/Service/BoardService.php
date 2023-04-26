@@ -19,6 +19,11 @@ class BoardService
 
     public function getBoard(Uuid $uuid): ?Board
     {
-        return $this->boardRepository->getBoard($uuid);
+        try {
+            return $this->boardRepository->getBoard($uuid);
+        } catch (\Throwable $e) {
+            $this->logger->critical('Could get board: ' . $uuid->value, ['error' => $e->getMessage()]);
+            throw BadParameterException::fromData('Could get board: ' . $uuid->value, $e);
+        }
     }
 }

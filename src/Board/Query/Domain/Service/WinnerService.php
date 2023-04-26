@@ -19,16 +19,21 @@ class WinnerService
 
     public function getWinningBoard(BoardStateDTO $boardStateDTO): BoardStatusDTO
     {
-        foreach ($this->strategies as $strategy) {
-            if ($strategy->supports(WinnerStrategyInterface::TYPE_RECT)) {
-                $winningBoardState = $strategy->execute($boardStateDTO);
+        try {
+            foreach ($this->strategies as $strategy) {
+                if ($strategy->supports(WinnerStrategyInterface::TYPE_RECT)) {
+                    $winningBoardState = $strategy->execute($boardStateDTO);
 
-                if ($winningBoardState->userUuid !== '0') {
-                    return $winningBoardState;
+                    if ($winningBoardState->userUuid !== '0') {
+                        return $winningBoardState;
+                    }
                 }
             }
-        }
 
-        return $winningBoardState;
+            return $winningBoardState;
+        } catch (\Throwable $e) {
+            $this->logger->critical('Could not get winning board.', ['error' => $e->getMessage()]);
+            throw BadParameterException::fromData('Could not get winning board.', $e);
+        }
     }
 }
