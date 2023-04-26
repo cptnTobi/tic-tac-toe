@@ -32,4 +32,9 @@ final class Coordinates
             throw BadParameterException::fromData('Wrong parameter provided: Coordinates must be less than 20');
         }
     }
+
+    public function __toString()
+    {
+        return (string) $this->x->value . ' - '.$this->y->value;
+    }
 }

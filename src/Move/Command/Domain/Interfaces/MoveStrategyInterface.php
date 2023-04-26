@@ -13,5 +13,5 @@ interface MoveStrategyInterface
 
     public function supports(string $type): bool;
 
-    public function execute(BoardStateDTO $boardStateDTO): ?Coordinates;
+    public function execute(BoardStateDTO $boardStateDTO): array;
 }

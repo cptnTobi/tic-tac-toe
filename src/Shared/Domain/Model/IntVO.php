@@ -19,7 +19,7 @@ class IntVO
 
     public function __toString(): string
     {
-        return $this->value();
+        return (string) $this->value();
     }
 
     public function equals(IntVO $object): bool
