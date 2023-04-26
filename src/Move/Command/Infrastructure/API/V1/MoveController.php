@@ -26,30 +26,34 @@ class MoveController extends AbstractController
 
     public function move(Request $request): Response
     {
-        $data = json_decode($request->getContent());
+        try {
+            $data = json_decode($request->getContent());
 
-        $command = new CreateMoveCommand(
-            new Move(
-                new Uuid($data->user),
-                new Uuid($data->board),
-                new Coordinates($data->x, $data->y),
-            )
-        );
-        $this->bus->dispatch($command);
+            $command = new CreateMoveCommand(
+                new Move(
+                    new Uuid($data->user),
+                    new Uuid($data->board),
+                    new Coordinates($data->x, $data->y),
+                )
+            );
+            $this->bus->dispatch($command);
 
 
 
-        $command = new CreateAIMoveCommand(
-            new Move(
-                new Uuid('1'),
-                new Uuid($data->board),
-                null
-            )
-        );
-        $this->bus->dispatch($command);
+            $command = new CreateAIMoveCommand(
+                new Move(
+                    new Uuid('1'),
+                    new Uuid($data->board),
+                    null
+                )
+            );
+            $this->bus->dispatch($command);
 
-        $this->cache->delete("xxx");
+            $this->cache->delete("xxx");
 
-        return ResponseFactory::createSuccessResponse();
+            return ResponseFactory::createSuccessResponse();
+        } catch (\Throwable $e) {
+            return ResponseFactory::createErrorResponse([], $request, $e);
+        }
     }
 }

@@ -23,7 +23,10 @@ final class ResponseFactory implements ResponseInterface
 
     public static function createErrorResponse(array $data = [], ?Request $request = null, ?Throwable $e = null, ?int $code = null): Response
     {
-        $code = $code ?? $e?->getCode() ?? Response::HTTP_SERVICE_UNAVAILABLE;
+        $code = $code ?? $e?->getCode();
+        $code = (!$code) ? Response::HTTP_SERVICE_UNAVAILABLE : $code;
+       
+       
         if ($request === null) {
             return new Response(null, $code);
         }
@@ -35,7 +38,7 @@ final class ResponseFactory implements ResponseInterface
                 'data' => [
                     'parameter' => $request->request->all(),
                     'content' => json_decode($request->getContent(), true),
-                    'ContentType' => $request->getContentTypeFormat(),
+                    'ContentType' => $request->getContentType(),
                     'AcceptableContentTypes' => $request->getAcceptableContentTypes()
                 ]
                     ], $data),

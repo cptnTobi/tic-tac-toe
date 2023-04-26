@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class BoardStateController extends AbstractController
 {
@@ -31,22 +32,26 @@ class BoardStateController extends AbstractController
         return $this->render('pages/gamePage.html.twig');
     }
 
-    public function getBoardState(string $id): Response
+    public function getBoardState(Request $request, string $id): Response
     {
-        /**
-        $value = $this->cache->get("xxx", function (ItemInterface $item) {
-            $item->expiresAfter(304800);
-            return '';
-        });
-        **/
+        try {
+            /**
+            $value = $this->cache->get("xxx", function (ItemInterface $item) {
+                $item->expiresAfter(304800);
+                return '';
+            });
+            **/
 
-        $query = new GetBoardStateQuery(
-            new Uuid($id)
-        );
-        $boardStateDTO = $this->handleQuery($query);
+            $query = new GetBoardStateQuery(
+                new Uuid($id)
+            );
+            $boardStateDTO = $this->handleQuery($query);
 
-        return ResponseFactory::createSuccessResponse([
-            'data' => json_decode(json_encode($boardStateDTO), true)
-        ]);
+            return ResponseFactory::createSuccessResponse([
+                'data' => json_decode(json_encode($boardStateDTO), true)
+            ]);
+        } catch (\Throwable $e) {
+            return ResponseFactory::createErrorResponse([], $request, $e);
+        }
     }
 }

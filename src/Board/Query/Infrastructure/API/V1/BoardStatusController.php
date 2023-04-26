@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class BoardStatusController extends AbstractController
 {
@@ -32,27 +33,31 @@ class BoardStatusController extends AbstractController
         return $this->render('pages/gamePage.html.twig');
     }
 
-    public function getBoardStatus(string $id): Response
+    public function getBoardStatus(Request $request, string $id): Response
     {
-        /**
-        $value = $this->cache->get("xxx", function (ItemInterface $item) {
-            $item->expiresAfter(304800);
-            return '';
-        });
-        **/
+        try {
+            /**
+            $value = $this->cache->get("xxx", function (ItemInterface $item) {
+                $item->expiresAfter(304800);
+                return '';
+            });
+            **/
 
-        $query = new GetBoardStateQuery(
-            new Uuid($id)
-        );
-        $boardStateDTO = $this->handleQuery($query);
+            $query = new GetBoardStateQuery(
+                new Uuid($id)
+            );
+            $boardStateDTO = $this->handleQuery($query);
 
-        $query = new GetBoardStatusQuery(
-            $boardStateDTO
-        );
-        $boardStatusDTO = $this->handleQuery($query);
+            $query = new GetBoardStatusQuery(
+                $boardStateDTO
+            );
+            $boardStatusDTO = $this->handleQuery($query);
 
-        return ResponseFactory::createSuccessResponse([
-            'data' => json_decode(json_encode($boardStatusDTO), true)
-        ]);
+            return ResponseFactory::createSuccessResponse([
+                'data' => json_decode(json_encode($boardStatusDTO), true)
+            ]);
+        } catch (\Throwable $e) {
+            return ResponseFactory::createErrorResponse([], $request, $e);
+        }
     }
 }

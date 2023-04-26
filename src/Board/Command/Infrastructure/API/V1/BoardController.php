@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class BoardController extends AbstractController
 {
@@ -20,16 +21,20 @@ class BoardController extends AbstractController
     ) {
     }
 
-    public function create(string $id): Response
+    public function create(Request $request, string $id): Response
     {
-        $command = new CreateBoardCommand(
-            new Uuid($id)
-        );
+        try {
+            $command = new CreateBoardCommand(
+                new Uuid($id)
+            );
 
-        $this->bus->dispatch($command);
+            $this->bus->dispatch($command);
 
-        $this->cache->delete("xxx");
+            $this->cache->delete("xxx");
 
-        return ResponseFactory::createSuccessResponse();
+            return ResponseFactory::createSuccessResponse();
+        } catch (\Throwable $e) {
+            return ResponseFactory::createErrorResponse([], $request, $e);
+        }
     }
 }
