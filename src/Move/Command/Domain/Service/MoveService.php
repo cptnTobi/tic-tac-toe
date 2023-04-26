@@ -35,6 +35,7 @@ class MoveService
             $board->setState(json_encode($boardState));
             $this->boardRepository->save($board);
         } catch (\Throwable $e) {
+            throw $e;
             $this->logger->critical('Could not move in board: ' . $boardUuid->value, ['error' => $e->getMessage()]);
             throw BadParameterException::fromData('Could not move in board: ' . $boardUuid->value, $e);
         }

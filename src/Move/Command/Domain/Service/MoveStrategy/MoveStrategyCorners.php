@@ -21,7 +21,7 @@ class MoveStrategyCorners implements MoveStrategyInterface
     {
         $res = [];
         $boardSize = count($boardStateDTO->state[0]);
-        
+
         $cornerCoordinates = [
             new Coordinates(0, 0),
             new Coordinates(0, $boardSize-1),

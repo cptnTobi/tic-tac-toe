@@ -42,7 +42,7 @@ class MoveFinderService
             }
             return $this->getHighestRankingCoordinates();
         } catch (\Throwable $e) {
-
+            throw $e;
             throw BadParameterException::fromData('Could not find coordinates for board: ' . $boardUuid->value, $e);
         }
     }
@@ -64,7 +64,6 @@ class MoveFinderService
                      ] ;
             }
         }
-
     }
 
     private function getHighestRankingCoordinates(): ?Coordinates
