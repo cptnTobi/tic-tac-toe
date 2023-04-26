@@ -40,8 +40,6 @@ class MoveService
         }
     }
 
-
-
     private function guardCoordinates(array $boardState, Coordinates $coordinates): void
     {
         if (
