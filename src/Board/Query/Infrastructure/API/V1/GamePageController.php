@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class GamePageController extends AbstractController
 {
@@ -25,6 +26,14 @@ class GamePageController extends AbstractController
 
     public function getPage(): Response
     {
-        return $this->render('pages/gamePage.html.twig');
+        try {
+          return $this->cache->get("GamePageController", function (ItemInterface $item) {
+                $item->expiresAfter(304800);
+                 return $this->render('pages/gamePage.html.twig');
+            });
+        } catch (\Throwable $e) {
+            return ResponseFactory::createErrorResponse([], $request, $e);
+        }
+       
     }
 }

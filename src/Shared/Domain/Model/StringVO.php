@@ -30,7 +30,7 @@ class StringVO
         return $this->value === $object->value();
     }
 
-    private function guard($value)
+    private function guard($value): void
     {
         if (!is_string($value)) {
             throw BadParameterException::fromData('String value required.');

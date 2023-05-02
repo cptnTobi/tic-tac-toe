@@ -25,12 +25,13 @@ class WinnerStrategyRows implements WinnerStrategyInterface
        foreach ($userUuids as $userUuid) {
            for ($y = 0; $y < $size; $y++) {
                for ($x = 0; $x < $size; $x++) {
-                   if ($boardStateDTO->state[$x][$y] === $userUuid) {
-                       if ($y === $size -1) {
+                   if ($boardStateDTO->state[$x][$y] === $userUuid) {                  
+                       if ($x === $size -1) {
                            return new BoardStatusDTO($userUuid, $boardStateDTO->state); // TODO: Return $boardStateDTO with marked winning strike, to display
                        }
                        continue;
                    } else {
+                   
                        break;
                    }
                }

@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Model;
 
-use App\Shared\Domain\Exception\BadParameterException;
-
-class IntVO
+class BoolVO
 {
     public function __construct(
-        public $value
+        public  $value
     ) {
         $this->guard($value);
-
         $this->value = $value;
     }
 
@@ -31,10 +28,10 @@ class IntVO
         return $this->value === $object->value();
     }
 
-    private function guard($value): void
-    {
-        if (!is_int($value)) {
-            throw BadParameterException();
-        }
-    }
+      private function guard($value): void
+      {
+          if (!is_bool($value)) {
+              throw BadParameterException();
+          }
+      }
 }

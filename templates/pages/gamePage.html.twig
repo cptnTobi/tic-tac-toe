@@ -88,19 +88,20 @@
         
         async function updateStatus() {
             let status = await boardStatus(board);  
-            // TODO: Bug: Cannot retrieve value from this function
-            /**
+                 
             switch (status) {
-                case 0:
-                  // do nothing, game is ongoing
-                case 1:
+                case '0':
+                    setStatus('...');
+                   break;
+                case '1': 
                   setStatus('Computer won.');
-                case 2:
+                  break;
+                case '2':
                     setStatus('You won.');
+                    break;
                 default:
-                  setStatus('...');
+                  setStatus('Something bad happened...');
               }
-            **/
         }
         
         function setStatus(status) {

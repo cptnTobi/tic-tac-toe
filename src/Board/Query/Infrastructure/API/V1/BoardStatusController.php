@@ -9,11 +9,13 @@ use App\Board\Query\Domain\Query\GetBoardStatusQuery;
 use App\Shared\Domain\Factory\ResponseFactory;
 use App\Shared\Domain\Model\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Cache\ItemInterface;
+use Throwable;
 
 class BoardStatusController extends AbstractController
 {
@@ -36,27 +38,25 @@ class BoardStatusController extends AbstractController
     public function getBoardStatus(Request $request, string $id): Response
     {
         try {
-            /**
-            $value = $this->cache->get("xxx", function (ItemInterface $item) {
-                $item->expiresAfter(304800);
-                return '';
+            return $this->cache->get("boardStatus", function (ItemInterface $item) use($id) {
+                $item->expiresAfter(60);
+                
+                $query = new GetBoardStateQuery(
+                    new Uuid($id)
+                );
+                $boardStateDTO = $this->handleQuery($query);
+
+                $query = new GetBoardStatusQuery(
+                    $boardStateDTO
+                );
+                $boardStatusDTO = $this->handleQuery($query);
+
+                return ResponseFactory::createSuccessResponse([
+                    'data' => json_decode(json_encode($boardStatusDTO), true)
+                ]);
             });
-            **/
 
-            $query = new GetBoardStateQuery(
-                new Uuid($id)
-            );
-            $boardStateDTO = $this->handleQuery($query);
-
-            $query = new GetBoardStatusQuery(
-                $boardStateDTO
-            );
-            $boardStatusDTO = $this->handleQuery($query);
-
-            return ResponseFactory::createSuccessResponse([
-                'data' => json_decode(json_encode($boardStatusDTO), true)
-            ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return ResponseFactory::createErrorResponse([], $request, $e);
         }
     }

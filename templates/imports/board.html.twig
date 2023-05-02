@@ -21,11 +21,11 @@
         });
     }
     
-    async function boardStatus(id) {
+    async function boardStatus(boardId) {
         let url = "{{ path('api_board_status', {'id': 'replace-id'} | escape('js')) }}"
-            .replace('replace-id', id);
+            .replace('replace-id', boardId);
        
-        getData(url).then((res) => {   
+        return getData(url).then((res) => {   
             return res.data.userUuid;
         });
     }

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Model;
 
+use App\Shared\Domain\Exception\BadParameterException;
+
 class ArrayVO
 {
     public function __construct(
-        public array $value
+        public $value
     ) {
+        $this->guard($value);
         $this->value = $value;
     }
 
@@ -16,4 +19,10 @@ class ArrayVO
     {
         return $this->value;
     }
+     private function guard($value): void
+     {
+         if (!is_array($value)) {
+             throw BadParameterException();
+         }
+     }
 }
