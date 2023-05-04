@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Model;
 
+use App\Shared\Domain\Exception\BadParameterException;
+
 class BoolVO
 {
     public function __construct(
@@ -31,7 +33,7 @@ class BoolVO
       private function guard($value): void
       {
           if (!is_bool($value)) {
-              throw BadParameterException();
+             throw BadParameterException::fromData('Boolean value required.');
           }
       }
 }

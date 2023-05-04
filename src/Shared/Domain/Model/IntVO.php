@@ -34,7 +34,7 @@ class IntVO
     private function guard($value): void
     {
         if (!is_int($value)) {
-            throw BadParameterException();
+           throw BadParameterException::fromData('Integer value required.');
         }
     }
 }

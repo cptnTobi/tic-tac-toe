@@ -30,7 +30,7 @@ class BoardController extends AbstractController
 
             $this->bus->dispatch($command);
 
-            $this->cache->delete("xxx");
+            $this->cache->delete("boardStatus");
 
             return ResponseFactory::createSuccessResponse();
         } catch (\Throwable $e) {

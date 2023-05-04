@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Model;
 
-use Symfony\Component\Uid\Uuid;
+use App\Shared\Domain\Exception\BadParameterException;
 
 class UrlVO extends StringVO
 {

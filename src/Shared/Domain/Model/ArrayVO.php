@@ -22,7 +22,7 @@ class ArrayVO
      private function guard($value): void
      {
          if (!is_array($value)) {
-             throw BadParameterException();
+             throw BadParameterException::fromData('Array value required.');
          }
      }
 }

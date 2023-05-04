@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Board\Query\Application\Handler;
 
-use App\Shared\Domain\Interfaces\Query\QueryHandlerInterface;
+use App\Board\Query\Application\DTO\BoardStatusDTO;
 use App\Board\Query\Domain\Query\GetBoardStatusQuery;
 use App\Board\Query\Domain\Service\WinnerService;
-use App\Board\Query\Application\DTO\BoardStatusDTO;
-use App\Board\Query\Application\DTO\BoardStateDTO;
+use App\Shared\Domain\Interfaces\Query\QueryHandlerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 class GetBoardStatusHandler implements QueryHandlerInterface

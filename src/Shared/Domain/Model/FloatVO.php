@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Shared\Domain\Model;
 
+use App\Shared\Domain\Exception\BadParameterException;
+
 class FloatVO
 {
     public function __construct(
@@ -31,7 +33,7 @@ class FloatVO
           private function guard($value): void
           {
               if (!is_float($value)) {
-                  throw BadParameterException();
+                 throw BadParameterException::fromData('Float value required.');
               }
           }
 }

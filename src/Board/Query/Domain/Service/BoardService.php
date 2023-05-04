@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Board\Query\Domain\Service;
 
-use App\Shared\Infrastructure\Logger\BaseLoggerInterface;
 use App\Shared\Domain\Entity\Board;
+use App\Shared\Domain\Exception\BadParameterException;
 use App\Shared\Domain\Model\Uuid;
+use App\Shared\Infrastructure\Logger\BaseLoggerInterface;
 use App\Shared\Infrastructure\Repository\BoardRepository;
+use Throwable;
 
 class BoardService
 {
@@ -21,7 +23,7 @@ class BoardService
     {
         try {
             return $this->boardRepository->getBoard($uuid);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->critical('Could get board: ' . $uuid->value, ['error' => $e->getMessage()]);
             throw BadParameterException::fromData('Could get board: ' . $uuid->value, $e);
         }

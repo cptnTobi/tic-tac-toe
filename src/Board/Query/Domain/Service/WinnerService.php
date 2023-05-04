@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Board\Query\Domain\Service;
 
-use App\Board\Query\Model\BoardState;
+use App\Board\Query\Application\DTO\BoardStateDTO;
 use App\Board\Query\Application\DTO\BoardStatusDTO;
 use App\Board\Query\Domain\Interfaces\WinnerStrategyInterface;
-use App\Board\Query\Application\DTO\BoardStateDTO;
+use App\Shared\Domain\Exception\BadParameterException;
+use App\Shared\Infrastructure\Logger\BaseLoggerInterface;
+use Throwable;
 
 class WinnerService
 {
     public function __construct(
-        private iterable $strategies
+        private iterable $strategies,
+        private BaseLoggerInterface $logger
     ) {
 
     }
@@ -31,7 +34,7 @@ class WinnerService
             }
 
             return $winningBoardState;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->critical('Could not get winning board.', ['error' => $e->getMessage()]);
             throw BadParameterException::fromData('Could not get winning board.', $e);
         }

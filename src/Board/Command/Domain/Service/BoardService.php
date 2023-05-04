@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace App\Board\Command\Domain\Service;
 
-use App\Shared\Infrastructure\Logger\BaseLoggerInterface;
 use App\Shared\Domain\Entity\Board;
+use App\Shared\Domain\Exception\BadParameterException;
 use App\Shared\Domain\Model\Uuid;
+use App\Shared\Infrastructure\Logger\BaseLoggerInterface;
 use App\Shared\Infrastructure\Repository\BoardRepository;
+use Throwable;
 
 class BoardService
 {
@@ -37,7 +39,7 @@ class BoardService
             $board->setState(json_encode(self::BOARD_DEFAULT));
 
             $this->boardRepository->save($board);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->critical('Could create board: ' . $uuid->value, ['error' => $e->getMessage()]);
             throw BadParameterException::fromData('Could create board: ' . $uuid->value, $e);
         }

@@ -5,9 +5,12 @@ namespace App\Tests\App\Move\Command\Domain\Service\MoveStrategy;
 use App\Move\Command\Application\DTO\BoardStateDTO;
 use App\Move\Command\Domain\Service\MoveStrategy\MoveStrategyEmptyRows;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MoveStrategyEmptyRowsTest extends KernelTestCase
 {
+    private ContainerInterface $container;
+    
     public function setUp(): void
     {
         parent::setUp();

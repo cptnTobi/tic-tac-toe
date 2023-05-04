@@ -6,5 +6,5 @@ namespace App\Shared\Domain\Interfaces\Command;
 
 interface CommandBusInterface
 {
-    public function handle(Command $command);
+    public function handle(CommandInterface $command);
 }

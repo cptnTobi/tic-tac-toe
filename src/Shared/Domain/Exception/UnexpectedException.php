@@ -6,7 +6,7 @@ namespace App\Shared\Domain\Exception;
 
 use Throwable;
 
-class UnexpectedException extends ApplicationException
+class UnexpectedException extends DomainException
 {
     private const MESSAGE = 'Unexpected error occurred.';
     private const CODE = 503;

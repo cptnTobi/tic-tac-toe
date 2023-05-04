@@ -6,5 +6,5 @@ namespace App\Shared\Domain\Interfaces\Query;
 
 interface QueryBusInterface
 {
-    public function handle(Query $query);
+    public function handle(QueryInterface $query);
 }
